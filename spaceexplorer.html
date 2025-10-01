@@ -96,7 +96,12 @@
 <body>
   <canvas id="stars"></canvas>
   <div id="content" class="container"></div>
-  <div id="note" class="note" style="display:none;">Bấm trái: quay lại / Bấm phải: Chuyển trang</div>
+  <div id="note" class="note" style="display:none;">Bấm trái: Quay lại / Bấm phải: Chuyển trang</div>
+
+  <!-- Nhạc nền -->
+  <audio id="bg-music" loop>
+    <source src="https://github.com/vietduygiapdz/spaceexplorer/raw/7d143fec2a8712787b292473c5bf120d22f49341/SOOBIN%20-%20Dancing%20In%20The%20Dark%20%20'BA%CC%A3%CC%82T%20NO%CC%81%20LE%CC%82N'%20Album%20(Official%20MV)%20-%20SOOBIN%20Official.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     const pages = [
@@ -113,10 +118,10 @@
         <div class="menu-font menu-box">Bấm sang phải để sang mục tiếp theo</div>
       `, font: 'menu' },
 
-      // Trang 3–16 (text)
-      { text: "Chào mừng cậu đã tới với \"khoảng trời\" của tớ, Diệu Linh. Sự thật là không có tựa game nào đâu." },
+      // Trang 3–16
+      { text: "Thật ra không có tựa Game nào đâu. Chào mừng cậu đã tới với \"khoảng trời\" của tớ, Diệu Linh." },
       { text: "Như này cũng hơi lạ, và hơi đột ngột nhỉ. Tớ biết bình thường tớ và cậu sẽ không bao giờ xưng hô và nói chuyện theo kiểu này đâu." },
-      { text: "Thật ra tớ đã định viết những dòng này thành thư tay rồi bỏ chung với món quà hôm trước mà tớ đưa cho cậu rồi. Nhưng vì hôm đó tay tớ không ổn chút nào hết nên không có bức thư tay nào cả. Nên tớ nghĩ tự làm một trang web nhỏ như này cũng sẽ khá ý nghĩa nhỉ, ít nhất là hơn vài dòng tin nhắn khô khan." },
+      { text: "Thật ra tớ đã định viết những dòng này thành thư tay rồi bỏ chung với món quà hôm trước mà tớ đưa cho cậu rồi. Nhưng vì hôm đó tay tớ hơi không ổn nên tớ chẳng kịp viết bức thư tay nào cả. Nên tớ nghĩ tự làm một trang web nhỏ như này cũng sẽ khá ý nghĩa nhỉ, ít nhất là hơn vài dòng tin nhắn khô khan." },
       { text: "Dù sao thì, đây cũng là một vài cảm xúc của tớ thôi. Tớ cũng chẳng rõ đây có phải là cảm xúc nhất thời hay không nữa." },
       { text: "Thành thật mà nói, cậu là người giúp tớ Move on sau mối quan hệ kia nhanh như vậy, giúp tớ ổn định cảm xúc hơn rất nhiều, là người lắng nghe những chuyện mà tớ vốn chẳng biết nói với ai. Nói sao nhỉ, có lẽ cậu là người quan trọng nhất và thân nhất với tớ từ lúc tớ xuống đại học tới giờ, nhất là khi tớ vừa trải qua kha khá chuyện không vui nữa." },
       { text: "Đó là lí do tớ cảm thấy cậu rất tuyệt vời. Kiểu, sao nhỉ, một người dễ nói chuyện và biết lắng nghe, cởi mở, thân thiện, khá hào phòng với mọi người, và cũng vô cùng giỏi nữa. Dẫu vậy thì, tớ biết là mỗi người đều có những muộn phiền, những tâm sự riêng dù cho họ có như nào đi chăng nữa. Nên nếu có vấn đề gì cậu có thể nói với tớ cũng được, nhe." },
@@ -133,6 +138,7 @@
     let currentPage = 0;
     const contentDiv = document.getElementById('content');
     const noteDiv = document.getElementById('note');
+    const audio = document.getElementById('bg-music');
 
     function showPage(index) {
       contentDiv.innerHTML = '';
@@ -155,6 +161,11 @@
         }
         typeWriter();
         noteDiv.style.display = 'block';
+
+        // Phát nhạc từ trang 3 trở đi
+        if (index >= 2 && audio.paused) {
+          audio.play().catch(err => console.log("Autoplay bị chặn:", err));
+        }
       }
     }
 
