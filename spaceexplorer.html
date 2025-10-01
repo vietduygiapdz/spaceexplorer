@@ -19,6 +19,7 @@
       width: 100%;
       height: 100%;
       z-index: -1;
+      opacity: 0.5; /* ⭐ Làm mờ sao */
     }
     .container {
       display: flex;
@@ -149,7 +150,7 @@
           if (i < page.text.length) {
             textDiv.textContent += page.text.charAt(i);
             i++;
-            setTimeout(typeWriter, 30);
+            setTimeout(typeWriter, 36); // ⏳ chỉnh 36ms/char
           }
         }
         typeWriter();
@@ -190,7 +191,7 @@
 
     function drawStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "white";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; /* ⭐ Sao mờ */
       stars.forEach(s => {
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
