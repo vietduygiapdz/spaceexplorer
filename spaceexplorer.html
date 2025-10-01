@@ -39,13 +39,13 @@
       text-shadow: 0 0 10px cyan, 0 0 20px blue;
     }
     .title {
-      font-size: 72px;
+      font-size: clamp(36px, 8vw, 72px);
       margin-bottom: 40px;
     }
     .press-start {
-      font-size: 32px;
+      font-size: clamp(18px, 4vw, 32px);
       border: 3px solid cyan;
-      padding: 20px 40px;
+      padding: 15px 30px;
       animation: blink 0.8s step-start infinite;
     }
     @keyframes blink {
@@ -58,14 +58,14 @@
       font-weight: bold;
       color: cyan;
       text-shadow: 0 0 10px cyan, 0 0 20px blue;
-      font-size: 32px;
+      font-size: clamp(16px, 3.5vw, 28px);
     }
     .menu-box {
       border: 3px solid cyan;
-      padding: 20px;
-      margin: 15px;
+      padding: 15px;
+      margin: 10px;
       width: fit-content;
-      min-width: 500px;
+      min-width: 250px;
       transition: background 0.3s, color 0.3s;
     }
     .menu-box:hover {
@@ -78,8 +78,8 @@
       font-family: 'Courier New', monospace;
       color: white;
       text-shadow: 0 0 10px #fff, 0 0 20px #aaa;
-      font-size: 22px;
-      line-height: 1.8;
+      font-size: clamp(14px, 3.5vw, 20px);
+      line-height: 1.6;
       max-width: 850px;
       padding: 0 15px;
     }
@@ -90,7 +90,7 @@
       bottom: 20px;
       width: 100%;
       text-align: center;
-      font-size: 18px;
+      font-size: clamp(12px, 3vw, 16px);
       font-family: 'Courier New', monospace;
       color: #bbb;
     }
