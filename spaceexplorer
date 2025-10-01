@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Space Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      color: white;
+    }
+    canvas#stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Trang 1 */
+    .game-font {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      color: cyan;
+      text-shadow: 0 0 10px cyan, 0 0 20px blue;
+    }
+    .title {
+      font-size: 64px;
+      margin-bottom: 40px;
+    }
+    .press-start {
+      font-size: 24px;
+      border: 2px solid cyan;
+      padding: 15px 30px;
+      animation: blink 0.8s step-start infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* Trang 2 */
+    .menu-font {
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      color: cyan;
+      text-shadow: 0 0 10px cyan, 0 0 20px blue;
+    }
+    .menu-box {
+      border: 2px solid cyan;
+      padding: 15px;
+      margin: 10px;
+      width: fit-content;
+      min-width: 400px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .menu-box:hover {
+      background: cyan;
+      color: black;
+    }
+
+    /* Trang 3–16 */
+    .type-font {
+      font-family: 'Courier New', monospace;
+      color: white;
+      text-shadow: 0 0 8px #fff;
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 800px;
+    }
+
+    /* Note */
+    .note {
+      position: fixed;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <div id="content" class="container"></div>
+  <div id="note" class="note" style="display:none;">Bấm trái: quay lại / Bấm phải: Chuyển trang</div>
+
+  <script>
+    const pages = [
+      // Trang 1
+      { html: `
+        <div class="game-font title">SPACE EXPLORER</div>
+        <div class="game-font press-start">PRESS START</div>
+      `, font: 'game' },
+
+      // Trang 2
+      { html: `
+        <div class="menu-font" style="font-size:28px; margin-bottom:30px;">Hướng dẫn chi tiết</div>
+        <div class="menu-font menu-box">Bấm sang trái để quay lại giao diện chính</div>
+        <div class="menu-font menu-box">Bấm sang phải để sang mục tiếp theo</div>
+      `, font: 'menu' },
+
+      // Trang 3–16 (text)
+      { text: "Chào mừng cậu đã tới với \"khoảng trời\" của tớ, Diệu Linh. Sự thật là không có tựa game nào đâu." },
+      { text: "Như này cũng hơi lạ, và hơi đột ngột nhỉ. Tớ biết bình thường tớ và cậu sẽ không bao giờ xưng hô và nói chuyện theo kiểu này đâu." },
+      { text: "Thật ra tớ đã định viết những dòng này thành thư tay rồi bỏ chung với món quà hôm trước mà tớ đưa cho cậu rồi. Nhưng vì hôm đó tay tớ không ổn chút nào hết nên không có bức thư tay nào cả. Nên tớ nghĩ tự làm một trang web nhỏ như này cũng sẽ khá ý nghĩa nhỉ, ít nhất là hơn vài dòng tin nhắn khô khan." },
+      { text: "Dù sao thì, đây cũng là một vài cảm xúc của tớ thôi. Tớ cũng chẳng rõ đây có phải là cảm xúc nhất thời hay không nữa." },
+      { text: "Thành thật mà nói, cậu là người giúp tớ Move on sau mối quan hệ kia nhanh như vậy, giúp tớ ổn định cảm xúc hơn rất nhiều, là người lắng nghe những chuyện mà tớ vốn chẳng biết nói với ai. Nói sao nhỉ, có lẽ cậu là người quan trọng nhất và thân nhất với tớ từ lúc tớ xuống đại học tới giờ, nhất là khi tớ vừa trải qua kha khá chuyện không vui nữa." },
+      { text: "Đó là lí do tớ cảm thấy cậu rất tuyệt vời. Kiểu, sao nhỉ, một người dễ nói chuyện và biết lắng nghe, cởi mở, thân thiện, khá hào phòng với mọi người, và cũng vô cùng giỏi nữa. Dẫu vậy thì, tớ biết là mỗi người đều có những muộn phiền, những tâm sự riêng dù cho họ có như nào đi chăng nữa. Nên nếu có vấn đề gì cậu có thể nói với tớ cũng được, nhe." },
+      { text: "Về bản thân tớ, tớ biết mình còn nhiều thiếu sót, cả về ngoại hình nè, rồi điều kiện tài chính, vân vân và mây mây. Tớ cũng khá tiêu cực và tự ti về những điều đó chứ. Đôi khi tớ cảm giác là nếu có phép màu nào đó giúp tớ làm nên chuyện thì tớ cũng sẽ không đủ khả năng để giữ cậu ở bên mình, ít nhất là trong thời điểm hiện tại." },
+      { text: "Đó là lí do mà tớ vẫn luôn cố gắng nè. Cố gắng học tốt hơn. Cố gắng để ngoại hình mình trông ổn áp hơn. Cố gắng để có một công việc ít nhất là ổn định trong thời điểm hiện tại. Cố gắng để tích cực hơn, ít khóc hơn. Tớ chưa dám mơ tới việc tớ sẽ sớm \"xứng đáng\" với cậu, nhưng tớ vẫn cố gắng để ít nhất là cậu, và cả tớ, có thể nhìn thấy rằng tớ đã thay đổi tích cực và tiến bộ theo thời gian, hứa đó." },
+      { text: "Và, nói sao nhỉ, tớ biết là tớ vốn chẳng lọt vào mắt xanh của cậu từ đầu, và có lẽ cậu cũng đang để ý người khác rồi thì phải. Nếu nói không buồn vì việc đó thì sẽ là nói dối đấy. Nhưng, đâu phải cái gì cũng sẽ theo ý mình được, đúng không?" },
+      { text: "Nhưng mà, tớ vẫn cứ tiếp tục vậy thôi, vì tớ nặng tình và cố chấp mà. Tớ mong là tớ vẫn có thể take care được cho cậu hết khả năng của mình, vẫn có thể được cậu để tâm dù chỉ một chút, vẫn có thể để lại cho cậu một ấn tượng gì đó về bản thân mình nè." },
+      { text: "Chỉ là, nếu cậu đang thực sự để tâm ai đó chẳng hạn, hay chỉ đơn giản là cảm thấy việc tớ cứ take care như thế hơi phiền, hoặc tớ có làm gì khiến cậu khó chịu, hoặc sao đó, thì cậu cứ nói với tớ nhe. Vì dù gì thì, tớ cũng muốn được nhìn thấy cậu vui vẻ và hạnh phúc, dù cho tớ có thể không phải là người làm được điều đó." },
+      { text: "Nói vậy chứ tớ vẫn mong là mình sẽ có một cơ hội nào đó, dù chỉ là nhỏ nhất. Nên là, nếu có bất kì điều gì cậu muốn tâm sự, hay có điều gì mà tớ có thể giúp được thì cậu cứ nói nhe, vì tớ vẫn sẽ ở đây và giúp cậu hết khả năng của mình." },
+      { text: "Cảm ơn cậu vì đã xuất hiện trong cuộc đời của tớ. Dù mọi chuyện có đi tới đâu, tớ cũng sẽ không bao giờ hối hận vì lựa chọn của mình, vì tớ đã dám nói ra những điều tớ nghĩ, và vì tớ đã thích đúng người tuyệt vời như cậu." },
+      { text: "Cảm ơn cậu rất nhiều vì tất cả mọi thứ, và cảm ơn cậu vì đã đọc những dòng bộc bạch này. Chúc cậu một ngày tốt lành. Và tớ là Việt Duy :>" }
+    ];
+
+    let currentPage = 0;
+    const contentDiv = document.getElementById('content');
+    const noteDiv = document.getElementById('note');
+
+    function showPage(index) {
+      contentDiv.innerHTML = '';
+      noteDiv.style.display = 'none';
+      const page = pages[index];
+
+      if (page.html) {
+        contentDiv.innerHTML = page.html;
+      } else if (page.text) {
+        const textDiv = document.createElement('div');
+        textDiv.className = 'type-font';
+        contentDiv.appendChild(textDiv);
+        let i = 0;
+        function typeWriter() {
+          if (i < page.text.length) {
+            textDiv.textContent += page.text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 30);
+          }
+        }
+        typeWriter();
+        noteDiv.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.clientX < window.innerWidth / 2) {
+        if (currentPage > 0) currentPage--;
+      } else {
+        if (currentPage < pages.length - 1) currentPage++;
+      }
+      showPage(currentPage);
+    });
+
+    // Vẽ background sao
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2,
+        d: Math.random() * 1
+      }));
+    }
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      moveStars();
+    }
+    function moveStars() {
+      stars.forEach(s => {
+        s.y += s.d;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+      });
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    setInterval(drawStars, 50);
+
+    showPage(currentPage);
+  </script>
+</body>
+</html>
