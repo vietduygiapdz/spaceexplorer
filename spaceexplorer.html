@@ -102,14 +102,9 @@
   <div id="content" class="container"></div>
   <div id="note" class="note" style="display:none;">Bấm trái: quay lại / Bấm phải: Chuyển trang</div>
 
-  
+  <!-- Giữ lại nhạc nền GitHub, phát từ page 3 -->
   <audio id="bg-music" loop>
-    <source src="https://actions.google.com/sounds/v1/ambiences/arcade_game_loop.ogg" type="audio/ogg">
-  </audio>
-
-  
-  <audio id="beep-sound">
-    <source src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" type="audio/ogg">
+    <source src="https://github.com/vietduygiapdz/spaceexplorer/blob/7d143fec2a8712787b292473c5bf120d22f49341/SOOBIN%20-%20Dancing%20In%20The%20Dark%20%20'BA%CC%A3%CC%82T%20NO%CC%81%20LE%CC%82N'%20Album%20(Official%20MV)%20-%20SOOBIN%20Official.mp3?raw=true" type="audio/mpeg">
   </audio>
 
   <script>
@@ -138,7 +133,6 @@
     const contentDiv = document.getElementById('content');
     const noteDiv = document.getElementById('note');
     const audio = document.getElementById('bg-music');
-    const beep = document.getElementById('beep-sound');
 
     function showPage(index) {
       contentDiv.innerHTML = '';
@@ -148,17 +142,12 @@
       if (page.html) {
         contentDiv.innerHTML = page.html;
 
-        if (index <= 1 && audio.paused) {
-          audio.play().catch(err => console.log("Autoplay bị chặn:", err));
-        }
-
-        
+        // PRESS START sang trang 2
         if (index === 0) {
           const pressStart = document.querySelector('.press-start');
           if (pressStart) {
             pressStart.addEventListener('click', (e) => {
               e.stopPropagation();
-              beep.play();
               currentPage = 1;
               showPage(currentPage);
             });
@@ -180,8 +169,9 @@
         typeWriter();
         noteDiv.style.display = 'block';
 
-        if (index === 2 && !audio.paused) {
-          
+        // ✅ Phát nhạc khi tới trang 3
+        if (index === 2 && audio.paused) {
+          audio.play().catch(err => console.log("Autoplay bị chặn:", err));
         }
       }
     }
@@ -198,7 +188,7 @@
 
     showPage(currentPage);
 
-   
+    // Background sao
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let stars = [];
