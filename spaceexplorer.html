@@ -19,7 +19,6 @@
       width: 100%;
       height: 100%;
       z-index: -1;
-      opacity: 0.5; /* ⭐ Làm mờ sao */
     }
     .container {
       display: flex;
@@ -48,6 +47,7 @@
       border: 3px solid cyan;
       padding: 15px 30px;
       animation: blink 0.8s step-start infinite;
+      cursor: pointer;
     }
     @keyframes blink {
       50% { opacity: 0; }
@@ -100,11 +100,16 @@
 <body>
   <canvas id="stars"></canvas>
   <div id="content" class="container"></div>
-  <div id="note" class="note" style="display:none;">Bấm trái: Quay lại / Bấm phải: Chuyển trang</div>
+  <div id="note" class="note" style="display:none;">Bấm trái: quay lại / Bấm phải: Chuyển trang</div>
 
-  <!-- Nhạc nền -->
+  
   <audio id="bg-music" loop>
-    <source src="https://github.com/vietduygiapdz/spaceexplorer/raw/7d143fec2a8712787b292473c5bf120d22f49341/SOOBIN%20-%20Dancing%20In%20The%20Dark%20%20'BA%CC%A3%CC%82T%20NO%CC%81%20LE%CC%82N'%20Album%20(Official%20MV)%20-%20SOOBIN%20Official.mp3" type="audio/mpeg">
+    <source src="https://actions.google.com/sounds/v1/ambiences/arcade_game_loop.ogg" type="audio/ogg">
+  </audio>
+
+  
+  <audio id="beep-sound">
+    <source src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" type="audio/ogg">
   </audio>
 
   <script>
@@ -133,6 +138,7 @@
     const contentDiv = document.getElementById('content');
     const noteDiv = document.getElementById('note');
     const audio = document.getElementById('bg-music');
+    const beep = document.getElementById('beep-sound');
 
     function showPage(index) {
       contentDiv.innerHTML = '';
@@ -141,6 +147,24 @@
 
       if (page.html) {
         contentDiv.innerHTML = page.html;
+
+        if (index <= 1 && audio.paused) {
+          audio.play().catch(err => console.log("Autoplay bị chặn:", err));
+        }
+
+        
+        if (index === 0) {
+          const pressStart = document.querySelector('.press-start');
+          if (pressStart) {
+            pressStart.addEventListener('click', (e) => {
+              e.stopPropagation();
+              beep.play();
+              currentPage = 1;
+              showPage(currentPage);
+            });
+          }
+        }
+
       } else if (page.text) {
         const textDiv = document.createElement('div');
         textDiv.className = 'type-font';
@@ -150,19 +174,20 @@
           if (i < page.text.length) {
             textDiv.textContent += page.text.charAt(i);
             i++;
-            setTimeout(typeWriter, 36); // ⏳ chỉnh 36ms/char
+            setTimeout(typeWriter, 36);
           }
         }
         typeWriter();
         noteDiv.style.display = 'block';
 
-        if (index === 2 && audio.paused) {
-          audio.play().catch(err => console.log("Autoplay bị chặn:", err));
+        if (index === 2 && !audio.paused) {
+          
         }
       }
     }
 
     document.body.addEventListener('click', function(e) {
+      if (e.target.classList.contains('press-start')) return; 
       if (e.clientX < window.innerWidth / 2) {
         if (currentPage > 0) currentPage--;
       } else {
@@ -173,7 +198,7 @@
 
     showPage(currentPage);
 
-    // Background sao
+   
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -185,14 +210,15 @@
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         r: Math.random() * 2,
-        d: Math.random() * 0.5
+        d: Math.random() * 0.5,
+        o: Math.random() * 0.4 + 0.2 
       }));
     }
 
     function drawStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; /* ⭐ Sao mờ */
       stars.forEach(s => {
+        ctx.fillStyle = `rgba(255,255,255,${s.o})`;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
