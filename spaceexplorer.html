@@ -95,14 +95,26 @@
       font-family: 'Courier New', monospace;
       color: #bbb;
     }
+
+    /* Đếm trang */
+    .page-counter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-family: 'Courier New', monospace;
+      color: cyan;
+      text-shadow: 0 0 5px cyan;
+      font-size: clamp(14px, 3.5vw, 18px);
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
   <canvas id="stars"></canvas>
+  <div id="page-counter" class="page-counter" style="display:none;"></div>
   <div id="content" class="container"></div>
   <div id="note" class="note" style="display:none;">Bấm trái: Quay lại / Bấm phải: Chuyển trang</div>
 
-  <!-- Giữ lại nhạc nền GitHub, phát từ page 3 -->
   <audio id="bg-music" loop>
     <source src="https://github.com/vietduygiapdz/spaceexplorer/blob/7d143fec2a8712787b292473c5bf120d22f49341/SOOBIN%20-%20Dancing%20In%20The%20Dark%20%20'BA%CC%A3%CC%82T%20NO%CC%81%20LE%CC%82N'%20Album%20(Official%20MV)%20-%20SOOBIN%20Official.mp3?raw=true" type="audio/mpeg">
   </audio>
@@ -113,30 +125,45 @@
       { html: `<div class="menu-font">Hướng dẫn chi tiết:</div>
                <div class="menu-font menu-box">Bấm sang trái để quay lại giao diện chính</div>
                <div class="menu-font menu-box">Bấm sang phải để sang mục tiếp theo</div>` },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." },
-      { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets." }
+      { text: "From: Việt Duy (Em Ngỗng)" },
+      { text: "To: Chị Huệ Anh (Chị Ngỗng)" },
+      { text: "Hà Nội, ngày 15 tháng 6, 2026." },
+      { text: "2 giờ 32 phút sáng. Viết cho những cảm xúc và kỉ niệm." },
+      { text: "Em chào chị Huệ Anh." },
+      { text: "Ờm, có lẽ bình thường chị đã quen với việc em Love Bombing rồi nhỉ. Nhưng, có lẽ chị chưa được thấy một phiên bản sến súa như này ở em bao giờ đâu đúng hong." },
+      { text: "Bản thân em, như em vẫn hay tự thừa nhận, chưa bao giờ là một người giỏi truyền tải những gì em muốn nói ở trong đầu ra thành lời. Nên nếu nội dung của 'bức thư' này có phần hơi kì cục, rất mong chị Ngỗng thông cảm cho em nhe." },
+      { text: "Nói sao nhỉ, em vẫn luôn tin rằng, mọi thứ trên đời này diễn ra đều có lý do của nó, và đa phần mọi sự trên đời đều bắt nguồn từ những sự ngẫu nhiên. Em vẫn luôn cảm tưởng như mọi sự ngẫu nhiên ấy đều đã được sắp đặt để em và chị gặp nhau. Em vẫn luôn thắc mắc rằng tại sao trên đời lại có một người giống em và hiểu em đến vậy. Em vẫn chẳng thể tin được chúng ta mới chỉ gặp nhau trong một khoảng thời gian ngắn, nhưng chị đã trở thành một phần rất rất quan trọng đối với em." },
+      { text: "Thực sự là, em luôn cảm thấy may mắn và biết ơn khi em gặp được chị. Một người chị cực xinh gái (kiểu thực sự rất xinh ấy), rất đáng yêu, cười rất tươi, nói chuyện rất duyên." },
+      { text: "Và, em rất ngưỡng mộ chị luôn ấy. Với em, chị thực sự là một người rất rất giỏi. Giỏi trong việc cân bằng rất nhiều công việc một lúc. Giỏi trong việc duy trì các mối quan hệ xung quanh ở mức mà chị muốn. Giỏi trong cách mà chị nói chuyện, suy nghĩ và giải quyết những công việc của chị, và giỏi trong cả cách mà chị luôn biết cách để upmood em và làm em cảm thấy ổn hơn." },
+      { text: "Em thực sự không biết khoảng thời gian khi em mới gặp chị mà không có chị ở đó, với một đống vấn đề em gặp phải, với cái Mental health nát tươm của em lúc ấy thì em sẽ ra sao nữa..." },
+      { text: "Đó là lí do mà, trong suốt khoảng thời gian vừa rồi, em càng quý chị bao nhiêu thì em càng thương chị bấy nhiêu." },
+      { text: "Em thực sự cũng rất buồn, rất xót khi nhìn thấy chị - một người mà em rất yêu quý - phải đối diện với những cảm xúc ấy. Lúc em biết rằng, khi chị buồn chị sẽ đội mũ, em chỉ mong một ngày gần nhất nào đó chị sẽ bỏ mũ ra và không đội lại nữa thôi. Kiểu, có lẽ là đầu tiên trên đời có người sinh lòng thù hận với mấy cái mũ ấy." },
+      { text: "Và em cũng thực sự rất lo cho chị nữa. Nhưng, nhiều lúc em cũng không biết nên nói gì, hay làm như nào để có thể giúp chị, ngoài việc liên tục yapping về ti tỉ thứ trên đời. Nếu em có lỡ hơi phiền vào một lúc nào đó, thì em thực sự xin lỗi ạ." },
+      { text: "Mấy ngày vừa rồi em có tranh thủ làm món quà nhỏ nhỏ này tặng cho chị, mong là nó có thể giúp chị upmood, tích cực và yêu đời hơn." },
+      { text: "Em thực sự mong chị sẽ luôn tươi cười (vì chị cười rất xinh ấy), hạnh phúc, và sẽ đạt được những mục tiêu mà chị mong muốn." },
+      { text: "Và em cũng mong là em có thể giữ được mối quan hệ này lâu thật lâu, vì em rất rất rất quý chị luôn ấy." },
+      { text: "Cảm ơn chị vì đã xuất hiện và đã là một người rất quan trọng đối với em." },
+      { text: "To be honest, I rlly rlly love u." }
     ];
 
     let currentPage = 0;
     const contentDiv = document.getElementById('content');
     const noteDiv = document.getElementById('note');
+    const pageCounterDiv = document.getElementById('page-counter');
     const audio = document.getElementById('bg-music');
 
     function showPage(index) {
       contentDiv.innerHTML = '';
       noteDiv.style.display = 'none';
+      
+      // Xử lý hiển thị số trang
+      if (index > 0) {
+        pageCounterDiv.style.display = 'block';
+        pageCounterDiv.textContent = `${index + 1} / ${pages.length}`;
+      } else {
+        pageCounterDiv.style.display = 'none';
+      }
+
       const page = pages[index];
 
       if (page.html) {
@@ -169,7 +196,6 @@
         typeWriter();
         noteDiv.style.display = 'block';
 
-       
         if (index === 2 && audio.paused) {
           audio.play().catch(err => console.log("Autoplay bị chặn:", err));
         }
